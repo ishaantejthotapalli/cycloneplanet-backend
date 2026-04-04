@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2026-04-04T05:14:09.589Z",
+  "lastUpdated": "2026-04-04T05:26:35.926Z",
   "storms": [
     {
-      "name": "or typhoon, or severe tropical cyclone",
+      "name": "29S (INDUSA)",
       "lat": -17.8,
       "lon": 71.6,
-      "wind": 65,
-      "warning": "high",
+      "wind": 0,
+      "warning": "low",
       "type": "cyclone"
     }
   ]
