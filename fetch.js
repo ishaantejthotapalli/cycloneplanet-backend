@@ -16,54 +16,59 @@ https.get(url, (res) => {
 
     try {
 
-      // 🔥 Extract cyclone sections
-      let blocks = data.split("TROPICAL CYCLONE");
+      // 🔥 Match ONLY real cyclone blocks
+      let matches = data.match(
+        /TROPICAL CYCLONE\s+\d{2}[A-Z]\s+\((.*?)\)[\s\S]*?NEAR\s+\d{1,2}\.\d[NS]\s+\d{1,3}\.\d[EW]/g
+      );
 
-      blocks.forEach(block => {
+      if (matches) {
+        matches.forEach(block => {
 
-        // 🌪️ Name (INDUSA)
-        let nameMatch = block.match(/\((.*?)\)/);
-        if (!nameMatch) return;
+          // 🌪️ Extract ID
+          let idMatch = block.match(/\d{2}[A-Z]/);
+          let id = idMatch ? idMatch[0] : "";
 
-        let name = nameMatch[1];
+          // 🌪️ Extract Name
+          let nameMatch = block.match(/\((.*?)\)/);
+          let name = nameMatch ? nameMatch[1] : "Unknown";
 
-        // 📍 Coordinates
-        let coordMatch = block.match(/NEAR\s+(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/);
-        if (!coordMatch) return;
+          // 📍 Extract Coordinates
+          let coordMatch = block.match(/(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/);
 
-        let lat = parseFloat(coordMatch[1]);
-        let lon = parseFloat(coordMatch[3]);
+          let lat = parseFloat(coordMatch[1]);
+          let lon = parseFloat(coordMatch[3]);
 
-        if (coordMatch[2] === "S") lat = -lat;
-        if (coordMatch[4] === "W") lon = -lon;
+          if (coordMatch[2] === "S") lat = -lat;
+          if (coordMatch[4] === "W") lon = -lon;
 
-        // 💨 Wind speed
-        let windMatch = block.match(/WINDS\s*-\s*(\d+)/);
-        let wind = windMatch ? parseInt(windMatch[1]) : 0;
+          // 💨 Extract Wind Speed
+          let windMatch = block.match(/WINDS\s*-\s*(\d+)/);
+          let wind = windMatch ? parseInt(windMatch[1]) : 0;
 
-        // 🎨 Category
-        let warning = "low";
-        if (wind >= 34) warning = "medium";
-        if (wind >= 64) warning = "high";
+          // 🎨 Category logic
+          let warning = "low";
+          if (wind >= 34) warning = "medium";
+          if (wind >= 64) warning = "high";
 
-        storms.push({
-          name,
-          lat,
-          lon,
-          wind,
-          warning,
-          type: "cyclone"
+          storms.push({
+            name: `${id} (${name})`,
+            lat: lat,
+            lon: lon,
+            wind: wind,
+            warning: warning,
+            type: "cyclone"
+          });
+
         });
-
-      });
+      }
 
     } catch (err) {
-      console.log("⚠️ Parse error");
+      console.log("⚠️ Parsing error:", err);
     }
 
     let output = {
       lastUpdated: new Date().toISOString(),
-      storms
+      storms: storms
     };
 
     fs.writeFileSync("data.json", JSON.stringify(output, null, 2));
@@ -71,8 +76,8 @@ https.get(url, (res) => {
     console.log("✅ Storms found:", storms.length);
   });
 
-}).on('error', () => {
-  console.log("⚠️ Fetch failed");
+}).on('error', (err) => {
+  console.log("⚠️ Fetch failed:", err);
 
   fs.writeFileSync("data.json", JSON.stringify({
     lastUpdated: new Date().toISOString(),
