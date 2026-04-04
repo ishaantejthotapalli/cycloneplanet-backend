@@ -1,4 +1,13 @@
 {
-  "lastUpdated": "2026-04-04T04:54:57.030Z",
-  "storms": []
+  "lastUpdated": "2026-04-04T05:14:09.589Z",
+  "storms": [
+    {
+      "name": "or typhoon, or severe tropical cyclone",
+      "lat": -17.8,
+      "lon": 71.6,
+      "wind": 65,
+      "warning": "high",
+      "type": "cyclone"
+    }
+  ]
 }
