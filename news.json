@@ -1,5 +1,47 @@
 {
-  "lastUpdated": "",
-  "featured": [],
-  "articles": []
+  "lastUpdated": "2026-04-04",
+  "featured": [
+    {
+      "title": "Oceans are supercharging hurricanes past Category 5",
+      "link": "https://www.sciencedaily.com/releases/2025/12/251225080725.htm"
+    },
+    {
+      "title": "Solar Superstorm Gannon crushed Earth’s plasmasphere to a record low",
+      "link": "https://www.sciencedaily.com/releases/2025/11/251122234723.htm"
+    },
+    {
+      "title": "Rainforest deaths are surging and scientists just found the shocking cause",
+      "link": "https://www.sciencedaily.com/releases/2025/07/250703092609.htm"
+    }
+  ],
+  "articles": [
+    {
+      "title": "New Orleans is sinking—and so are its $15 billion flood defenses",
+      "link": "https://www.sciencedaily.com/releases/2025/06/250627234122.htm"
+    },
+    {
+      "title": "Researchers use deep learning to predict flooding this hurricane season",
+      "link": "https://www.sciencedaily.com/releases/2025/06/250602154901.htm"
+    },
+    {
+      "title": "2021&#039;s Hurricane Ida could have been even worse for NYC",
+      "link": "https://www.sciencedaily.com/releases/2025/05/250529155413.htm"
+    },
+    {
+      "title": "When the sea moves inland: A global climate wake-up call from Bangladesh&#039;s Delta",
+      "link": "https://www.sciencedaily.com/releases/2025/05/250523120445.htm"
+    },
+    {
+      "title": "Breakthrough AI model could transform how we prepare for natural disasters",
+      "link": "https://www.sciencedaily.com/releases/2025/05/250522124851.htm"
+    },
+    {
+      "title": "AI is good at weather forecasting. Can it predict freak weather events?",
+      "link": "https://www.sciencedaily.com/releases/2025/05/250522124738.htm"
+    },
+    {
+      "title": "Wind-related hurricane losses for homeowners in the southeastern U.S. could be nearly 76 percent higher by 2060",
+      "link": "https://www.sciencedaily.com/releases/2025/05/250521124607.htm"
+    }
+  ]
 }
