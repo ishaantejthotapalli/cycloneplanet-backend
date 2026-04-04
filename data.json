@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-04-04T19:50:17.880Z",
+  "lastUpdated": "2026-04-04T20:18:00.570Z",
   "storms": [
     {
       "name": "29S (INDUSA)",
-      "lat": -20.3,
-      "lon": 70.2,
+      "lat": -23.7,
+      "lon": 70.3,
       "wind": 0,
       "warning": "low",
       "type": "cyclone"
