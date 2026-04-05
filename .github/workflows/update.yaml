@@ -24,12 +24,11 @@ jobs:
         run: |
           node fetch.js
           node fetchNews.js
-          node fetchCords.js
 
       - name: Commit and push
         run: |
           git config user.name "cyclone-bot"
           git config user.email "bot@cyclone.com"
-          git add data.json news.json Cordsdata.json
+          git add data.json news.json
           git commit -m "auto update" || echo "no changes"
           git push
