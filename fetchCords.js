@@ -5,7 +5,7 @@ console.log("🌀 Fetching HurricaneZone tracking data...");
 
 const base = "https://www.hurricanezone.org";
 
-// 🔥 STEP 1: GET HOMEPAGE
+// 🔥 STEP 1: FETCH HOMEPAGE
 https.get(base, (res) => {
   let data = '';
 
@@ -16,14 +16,13 @@ https.get(base, (res) => {
     let trackingLinks = [];
 
     try {
-      // 🔍 Find ALL links containing /tracking/
+      // 🔍 FIND ALL /tracking/ LINKS
       let matches = data.match(/href="([^"]*\/tracking\/[^"]*)"/g);
 
       if (matches) {
         matches.forEach(tag => {
           let link = tag.match(/href="([^"]+)"/)[1];
 
-          // Convert relative → absolute
           if (!link.startsWith("http")) {
             link = base + link;
           }
@@ -36,7 +35,6 @@ https.get(base, (res) => {
       console.log("⚠️ Error finding tracking links");
     }
 
-    // 🔥 Remove duplicates
     trackingLinks = [...new Set(trackingLinks)];
 
     console.log("🔗 Tracking pages found:", trackingLinks.length);
@@ -55,26 +53,44 @@ https.get(base, (res) => {
           res2.on('end', () => {
 
             try {
-              let matches = page.match(/src="([^"]+)"/g);
 
-              if (matches) {
-                matches.forEach(tag => {
+              // 🌀 1. GET <img src="">
+              let imgMatches = page.match(/src="([^"]+)"/g);
 
+              if (imgMatches) {
+                imgMatches.forEach(tag => {
                   let src = tag.match(/src="([^"]+)"/)[1];
 
-                  // Convert relative → absolute
                   if (!src.startsWith("http")) {
                     src = base + src;
                   }
 
-                  // 🔥 FINAL PERFECT FILTER (YOUR LOGIC + SAFETY)
                   if (
                     src.includes("/tracking/") &&
                     src.match(/\.(png|jpg|gif)$/)
                   ) {
                     images.push(src);
                   }
+                });
+              }
 
+              // 🌀 2. GET <a href="">
+              let linkMatches = page.match(/href="([^"]+)"/g);
+
+              if (linkMatches) {
+                linkMatches.forEach(tag => {
+                  let href = tag.match(/href="([^"]+)"/)[1];
+
+                  if (!href.startsWith("http")) {
+                    href = base + href;
+                  }
+
+                  if (
+                    href.includes("/tracking/") &&
+                    href.match(/\.(png|jpg|gif)$/)
+                  ) {
+                    images.push(href);
+                  }
                 });
               }
 
@@ -100,7 +116,7 @@ https.get(base, (res) => {
 
     fs.writeFileSync("Cordsdata.json", JSON.stringify(output, null, 2));
 
-    console.log("✅ Tracking images found:", images.length);
+    console.log("✅ FINAL tracking images:", images.length);
 
   });
 
