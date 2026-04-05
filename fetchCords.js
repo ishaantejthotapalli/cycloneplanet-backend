@@ -1,9 +1,9 @@
 const https = require('https');
 const fs = require('fs');
 
-console.log("🌀 Fetching HurricaneZone images...");
+console.log("🌀 Fetching tracking page...");
 
-const url = "https://www.hurricanezone.org/";
+const url = "https://www.hurricanezone.org/tracking/indian-s4.php";
 
 https.get(url, (res) => {
   let data = '';
@@ -15,7 +15,8 @@ https.get(url, (res) => {
     let images = [];
 
     try {
-      let matches = data.match(/<img[^>]+src="([^">]+)"/g);
+      // 🔥 Find ALL src links
+      let matches = data.match(/src="([^"]+)"/g);
 
       if (matches) {
         matches.forEach(tag => {
@@ -25,13 +26,14 @@ https.get(url, (res) => {
 
           let src = srcMatch[1];
 
-          // 🔥 Convert relative → absolute
-          if (!src.startsWith("http")) {
-            src = "https://www.hurricanezone.org/" + src;
-          }
+          // 🔥 Only keep /tracking/ URLs
+          if (src.includes("/tracking/")) {
 
-          // 🔑 ONLY TRACKING IMAGES
-          if (src.toLowerCase().includes("tracking")) {
+            // Convert to full URL
+            if (!src.startsWith("http")) {
+              src = "https://www.hurricanezone.org" + src;
+            }
+
             images.push(src);
           }
 
