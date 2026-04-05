@@ -1,50 +1,96 @@
 const https = require('https');
 const fs = require('fs');
 
-console.log("🌀 Fetching tracking page...");
+console.log("🌀 Fetching HurricaneZone tracking data...");
 
-const url = "https://www.hurricanezone.org/tracking/indian-s4.php";
+const base = "https://www.hurricanezone.org";
 
-https.get(url, (res) => {
+// 🔥 STEP 1: GET HOMEPAGE
+https.get(base, (res) => {
   let data = '';
 
   res.on('data', chunk => data += chunk);
 
-  res.on('end', () => {
+  res.on('end', async () => {
 
-    let images = [];
+    let trackingLinks = [];
 
     try {
-      // 🔥 Find ALL src links
-      let matches = data.match(/src="([^"]+)"/g);
+      // 🔍 Find ALL links containing /tracking/
+      let matches = data.match(/href="([^"]*\/tracking\/[^"]*)"/g);
 
       if (matches) {
         matches.forEach(tag => {
+          let link = tag.match(/href="([^"]+)"/)[1];
 
-          let srcMatch = tag.match(/src="([^"]+)"/);
-          if (!srcMatch) return;
-
-          let src = srcMatch[1];
-
-          // 🔥 Only keep /tracking/ URLs
-          if (src.includes("/tracking/")) {
-
-            // Convert to full URL
-            if (!src.startsWith("http")) {
-              src = "https://www.hurricanezone.org" + src;
-            }
-
-            images.push(src);
+          // Convert relative → absolute
+          if (!link.startsWith("http")) {
+            link = base + link;
           }
 
+          trackingLinks.push(link);
         });
       }
 
     } catch (err) {
-      console.log("⚠️ Parse error");
+      console.log("⚠️ Error finding tracking links");
     }
 
     // 🔥 Remove duplicates
+    trackingLinks = [...new Set(trackingLinks)];
+
+    console.log("🔗 Tracking pages found:", trackingLinks.length);
+
+    let images = [];
+
+    // 🔥 STEP 2: VISIT EACH TRACKING PAGE
+    for (let link of trackingLinks) {
+      await new Promise(resolve => {
+
+        https.get(link, (res2) => {
+          let page = '';
+
+          res2.on('data', chunk => page += chunk);
+
+          res2.on('end', () => {
+
+            try {
+              let matches = page.match(/src="([^"]+)"/g);
+
+              if (matches) {
+                matches.forEach(tag => {
+
+                  let src = tag.match(/src="([^"]+)"/)[1];
+
+                  // Convert relative → absolute
+                  if (!src.startsWith("http")) {
+                    src = base + src;
+                  }
+
+                  // 🔥 FINAL PERFECT FILTER (YOUR LOGIC + SAFETY)
+                  if (
+                    src.includes("/tracking/") &&
+                    src.match(/\.(png|jpg|gif)$/)
+                  ) {
+                    images.push(src);
+                  }
+
+                });
+              }
+
+            } catch (err) {
+              console.log("⚠️ Parse error on:", link);
+            }
+
+            resolve();
+          });
+
+        }).on('error', () => resolve());
+
+      });
+    }
+
+    // 🔥 FINAL CLEANUP
     images = [...new Set(images)];
 
     let output = {
@@ -55,10 +101,11 @@ https.get(url, (res) => {
     fs.writeFileSync("Cordsdata.json", JSON.stringify(output, null, 2));
 
     console.log("✅ Tracking images found:", images.length);
+
   });
 
 }).on('error', () => {
-  console.log("⚠️ Fetch failed");
+  console.log("⚠️ Failed to load homepage");
 
   fs.writeFileSync("Cordsdata.json", JSON.stringify({
     lastUpdated: new Date().toISOString(),
