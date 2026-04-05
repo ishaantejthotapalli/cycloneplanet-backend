@@ -15,7 +15,6 @@ https.get(url, (res) => {
     let images = [];
 
     try {
-      // 🔥 Extract all images
       let matches = data.match(/<img[^>]+src="([^">]+)"/g);
 
       if (matches) {
@@ -26,13 +25,13 @@ https.get(url, (res) => {
 
           let src = srcMatch[1];
 
-          // 👉 Filter cyclone-related images
-          if (src.includes("track") || src.includes("forecast") || src.includes("gif")) {
+          // 🔥 Convert relative → absolute
+          if (!src.startsWith("http")) {
+            src = "https://www.hurricanezone.org/" + src;
+          }
 
-            if (!src.startsWith("http")) {
-              src = "https://www.hurricanezone.org/" + src;
-            }
-
+          // 🔑 ONLY TRACKING IMAGES
+          if (src.toLowerCase().includes("tracking")) {
             images.push(src);
           }
 
@@ -40,21 +39,24 @@ https.get(url, (res) => {
       }
 
     } catch (err) {
-      console.log("⚠️ Error parsing images");
+      console.log("⚠️ Parse error");
     }
+
+    // 🔥 Remove duplicates
+    images = [...new Set(images)];
 
     let output = {
       lastUpdated: new Date().toISOString(),
-      images: images.slice(0, 10) // limit
+      images: images
     };
 
     fs.writeFileSync("Cordsdata.json", JSON.stringify(output, null, 2));
 
-    console.log("✅ Images found:", images.length);
+    console.log("✅ Tracking images found:", images.length);
   });
 
 }).on('error', () => {
-  console.log("⚠️ Failed");
+  console.log("⚠️ Fetch failed");
 
   fs.writeFileSync("Cordsdata.json", JSON.stringify({
     lastUpdated: new Date().toISOString(),
