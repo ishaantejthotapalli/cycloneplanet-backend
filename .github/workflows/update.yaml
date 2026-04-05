@@ -1,5 +1,4 @@
 name: Update Cyclone System
-
 on:
   schedule:
     - cron: "*/30 * * * *"
@@ -13,22 +12,24 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Run scripts
+      - name: Run backend scripts
         run: |
           node fetch.js
           node fetchNews.js
+          node fetchCords.js
 
-      - name: Commit changes
+      - name: Commit and push
         run: |
           git config user.name "cyclone-bot"
           git config user.email "bot@cyclone.com"
-          git add data.json news.json
-          git diff --cached --quiet || git commit -m "update cyclone system"
+          git add data.json news.json Cordsdata.json
+          git commit -m "auto update" || echo "no changes"
           git push
