@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-05T13:45:24.949Z",
+  "lastUpdated": "2026-04-05T14:26:19.823Z",
   "storms": [
     {
       "name": "29S (INDUSA)",
@@ -11,8 +11,8 @@
     },
     {
       "name": "30P (MAILA)",
-      "lat": -8.8,
-      "lon": 154.2,
+      "lat": -9.3,
+      "lon": 154.6,
       "wind": 0,
       "warning": "low",
       "type": "cyclone"
