@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-04-07T08:50:38.216Z",
+  "lastUpdated": "2026-04-07T09:57:14.037Z",
   "storms": [
     {
       "name": "30P (MAILA)",
       "lat": -9.9,
-      "lon": 156.4,
+      "lon": 156.5,
       "wind": 0,
       "warning": "low",
       "type": "cyclone"
