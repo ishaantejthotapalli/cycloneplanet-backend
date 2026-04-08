@@ -1,18 +1,18 @@
 {
-  "lastUpdated": "2026-04-08T02:03:44.520Z",
+  "lastUpdated": "2026-04-08T04:58:24.552Z",
   "storms": [
     {
       "name": "30P (MAILA)",
-      "lat": -9.5,
-      "lon": 156,
+      "lat": -9,
+      "lon": 155.9,
       "wind": 0,
       "warning": "low",
       "type": "cyclone"
     },
     {
       "name": "31P (VAIANU)",
-      "lat": -21.1,
-      "lon": 177,
+      "lat": -22.2,
+      "lon": 177.4,
       "wind": 0,
       "warning": "low",
       "type": "cyclone"
