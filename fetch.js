@@ -1,7 +1,7 @@
 const https = require('https');
 const fs = require('fs');
 
-console.log("🌪️ Scraping HurricaneZone...");
+console.log("🌪️ Fetching storms from HurricaneZone...");
 
 const url = "https://www.hurricanezone.org/";
 
@@ -15,25 +15,36 @@ https.get(url, (res) => {
     let storms = [];
 
     try {
+      // 🔥 Split into lines
+      let lines = data.split("\n");
 
-      // 🔥 Match ONLY real cyclone blocks
-      let matches = data.match(
-        /TROPICAL CYCLONE\s+\d{2}[A-Z]\s+\((.*?)\)[\s\S]*?NEAR\s+\d{1,2}\.\d[NS]\s+\d{1,3}\.\d[EW]/g
-      );
+      for (let i = 0; i < lines.length; i++) {
 
-      if (matches) {
-        matches.forEach(block => {
+        let line = lines[i].toLowerCase();
 
-          // 🌪️ Extract ID
-          let idMatch = block.match(/\d{2}[A-Z]/);
-          let id = idMatch ? idMatch[0] : "";
+        // 🔥 DETECT ALL STORM TYPES
+        if (
+          line.includes("tropical cyclone") ||
+          line.includes("tropical storm") ||
+          line.includes("typhoon") ||
+          line.includes("hurricane")
+        ) {
 
-          // 🌪️ Extract Name
-          let nameMatch = block.match(/\((.*?)\)/);
-          let name = nameMatch ? nameMatch[1] : "Unknown";
+          let fullText = lines[i];
 
-          // 📍 Extract Coordinates
-          let coordMatch = block.match(/(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/);
+          // 🔍 Extract storm name (e.g., 04W, 29S)
+          let nameMatch = fullText.match(/\b\d{2}[a-z]\b/i);
+
+          if (!nameMatch) continue;
+
+          let name = nameMatch[0].toUpperCase();
+
+          // 🔍 Find coordinates nearby
+          let coordsLine = lines.slice(i, i + 10).join(" ");
+
+          let coordMatch = coordsLine.match(/(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/i);
+
+          if (!coordMatch) continue;
 
           let lat = parseFloat(coordMatch[1]);
           let lon = parseFloat(coordMatch[3]);
@@ -41,29 +52,23 @@ https.get(url, (res) => {
           if (coordMatch[2] === "S") lat = -lat;
           if (coordMatch[4] === "W") lon = -lon;
 
-          // 💨 Extract Wind Speed
-          let windMatch = block.match(/WINDS\s*-\s*(\d+)/);
-          let wind = windMatch ? parseInt(windMatch[1]) : 0;
+          // 🚫 Avoid duplicates
+          if (!storms.some(s => s.name === name)) {
 
-          // 🎨 Category logic
-          let warning = "low";
-          if (wind >= 34) warning = "medium";
-          if (wind >= 64) warning = "high";
+            storms.push({
+              name: name,
+              lat: lat,
+              lon: lon,
+              wind: 0
+            });
 
-          storms.push({
-            name: `${id} (${name})`,
-            lat: lat,
-            lon: lon,
-            wind: wind,
-            warning: warning,
-            type: "cyclone"
-          });
-
-        });
+            console.log("✅ Found storm:", name);
+          }
+        }
       }
 
     } catch (err) {
-      console.log("⚠️ Parsing error:", err);
+      console.log("⚠️ Parse error");
     }
 
     let output = {
@@ -73,11 +78,11 @@ https.get(url, (res) => {
 
     fs.writeFileSync("data.json", JSON.stringify(output, null, 2));
 
-    console.log("✅ Storms found:", storms.length);
+    console.log("🌍 Total storms:", storms.length);
   });
 
-}).on('error', (err) => {
-  console.log("⚠️ Fetch failed:", err);
+}).on('error', () => {
+  console.log("⚠️ Fetch failed");
 
   fs.writeFileSync("data.json", JSON.stringify({
     lastUpdated: new Date().toISOString(),
