@@ -19,30 +19,28 @@ https.get(url, (res) => {
 
       for (let i = 0; i < lines.length; i++) {
 
-        let fullText = lines[i];
+        let line = lines[i];
 
-        // 🔥 STEP 1: DETECT HEADER (TOP BLUE TEXT)
-        let headerMatch = fullText.match(
-          /(Tropical Cyclone|Tropical Storm|Typhoon|Hurricane)\s+([A-Z0-9]+)/i
-        );
+        // 🔥 ONLY process WARNING sections (REAL storms)
+        if (!line.includes("WARNING NR")) continue;
 
-        if (!headerMatch) continue;
+        let block = lines.slice(i, i + 25).join(" ");
 
-        let detected = headerMatch[2].toUpperCase();
-
-        // 🚫 Skip junk matches
-        if (detected === "WARNING" || detected === "NR") continue;
-
-        let name = detected;
-
-        // 🔍 STEP 2: FIND CODE (30P, 04W, etc.)
-        let codeMatch = fullText.match(/\b\d{2}[A-Z]\b/i);
+        // 🔍 Extract code (30P, 04W)
+        let codeMatch = block.match(/\b\d{2}[A-Z]\b/i);
         let code = codeMatch ? codeMatch[0].toUpperCase() : null;
 
-        // 🔍 STEP 3: FIND COORDINATES NEARBY
-        let nearby = lines.slice(i, i + 15).join(" ");
+        // 🔍 Extract real name (MAILA, SINLAKU)
+        let nameMatch = block.match(/\(([^)]+)\)/);
+        let realName = nameMatch ? nameMatch[1].toUpperCase() : null;
 
-        let coordMatch = nearby.match(
+        // 🧠 FINAL NAME LOGIC
+        let name = realName || code;
+
+        if (!name) continue;
+
+        // 🔍 Extract coordinates
+        let coordMatch = block.match(
           /(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/i
         );
 
