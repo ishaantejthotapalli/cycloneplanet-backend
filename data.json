@@ -1,16 +1,46 @@
 {
-  "lastUpdated": "2026-04-11T08:29:42.608Z",
+  "lastUpdated": "2026-04-11T08:46:56.205Z",
   "storms": [
     {
+      "name": "MAILA",
+      "code": null,
+      "lat": -7.8,
+      "lon": 154.6,
+      "wind": 0
+    },
+    {
+      "name": "SINLAKU",
+      "code": null,
+      "lat": -7.8,
+      "lon": 154.6,
+      "wind": 0
+    },
+    {
       "name": "30P",
+      "code": "30P",
+      "lat": -7.8,
+      "lon": 154.6,
+      "wind": 0
+    },
+    {
+      "name": "IN",
+      "code": null,
+      "lat": -7.8,
+      "lon": 154.6,
+      "wind": 0
+    },
+    {
+      "name": "OVER",
+      "code": null,
       "lat": -7.8,
       "lon": 154.6,
       "wind": 0
     },
     {
       "name": "04W",
-      "lat": 8.5,
-      "lon": 151.5,
+      "code": "04W",
+      "lat": 8.8,
+      "lon": 151.4,
       "wind": 0
     }
   ]
