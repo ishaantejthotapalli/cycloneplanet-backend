@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-11T19:53:41.732Z",
+  "lastUpdated": "2026-04-11T20:19:29.561Z",
   "storms": [
     {
       "name": "VAIANU",
@@ -18,8 +18,8 @@
     {
       "name": "SINLAKU",
       "code": "04W",
-      "lat": 9,
-      "lon": 151.1,
+      "lat": 9.3,
+      "lon": 151.5,
       "wind": 0
     }
   ]
