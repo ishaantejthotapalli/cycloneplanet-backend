@@ -15,55 +15,56 @@ https.get(url, (res) => {
     let storms = [];
 
     try {
-      // 🔥 Split into lines
       let lines = data.split("\n");
 
       for (let i = 0; i < lines.length; i++) {
 
-        let line = lines[i].toLowerCase();
+        let fullText = lines[i];
 
-        // 🔥 DETECT ALL STORM TYPES
-        if (
-          line.includes("tropical cyclone") ||
-          line.includes("tropical storm") ||
-          line.includes("typhoon") ||
-          line.includes("hurricane")
-        ) {
+        // 🔥 STEP 1: DETECT HEADER (TOP BLUE TEXT)
+        let headerMatch = fullText.match(
+          /(Tropical Cyclone|Tropical Storm|Typhoon|Hurricane)\s+([A-Z0-9]+)/i
+        );
 
-          let fullText = lines[i];
+        if (!headerMatch) continue;
 
-          // 🔍 Extract storm name (e.g., 04W, 29S)
-          let nameMatch = fullText.match(/\b\d{2}[a-z]\b/i);
+        let detected = headerMatch[2].toUpperCase();
 
-          if (!nameMatch) continue;
+        // 🚫 Skip junk matches
+        if (detected === "WARNING" || detected === "NR") continue;
 
-          let name = nameMatch[0].toUpperCase();
+        let name = detected;
 
-          // 🔍 Find coordinates nearby
-          let coordsLine = lines.slice(i, i + 10).join(" ");
+        // 🔍 STEP 2: FIND CODE (30P, 04W, etc.)
+        let codeMatch = fullText.match(/\b\d{2}[A-Z]\b/i);
+        let code = codeMatch ? codeMatch[0].toUpperCase() : null;
 
-          let coordMatch = coordsLine.match(/(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/i);
+        // 🔍 STEP 3: FIND COORDINATES NEARBY
+        let nearby = lines.slice(i, i + 15).join(" ");
 
-          if (!coordMatch) continue;
+        let coordMatch = nearby.match(
+          /(\d{1,2}\.\d)([NS])\s+(\d{1,3}\.\d)([EW])/i
+        );
 
-          let lat = parseFloat(coordMatch[1]);
-          let lon = parseFloat(coordMatch[3]);
+        if (!coordMatch) continue;
 
-          if (coordMatch[2] === "S") lat = -lat;
-          if (coordMatch[4] === "W") lon = -lon;
+        let lat = parseFloat(coordMatch[1]);
+        let lon = parseFloat(coordMatch[3]);
 
-          // 🚫 Avoid duplicates
-          if (!storms.some(s => s.name === name)) {
+        if (coordMatch[2] === "S") lat = -lat;
+        if (coordMatch[4] === "W") lon = -lon;
 
-            storms.push({
-              name: name,
-              lat: lat,
-              lon: lon,
-              wind: 0
-            });
+        // 🚫 Avoid duplicates
+        if (!storms.some(s => s.name === name)) {
+          storms.push({
+            name: name,
+            code: code,
+            lat: lat,
+            lon: lon,
+            wind: 0
+          });
 
-            console.log("✅ Found storm:", name);
-          }
+          console.log("✅ Found storm:", name);
         }
       }
 
