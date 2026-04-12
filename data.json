@@ -1,20 +1,6 @@
 {
-  "lastUpdated": "2026-04-12T14:32:08.758Z",
+  "lastUpdated": "2026-04-12T15:26:16.376Z",
   "storms": [
-    {
-      "name": "VAIANU",
-      "code": "31P",
-      "lat": -26.8,
-      "lon": 179,
-      "wind": 0
-    },
-    {
-      "name": "MAILA",
-      "code": "30P",
-      "lat": -7.8,
-      "lon": 154.6,
-      "wind": 0
-    },
     {
       "name": "SINLAKU",
       "code": "04W",
