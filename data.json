@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-04-15T12:56:16.379Z",
+  "lastUpdated": "2026-04-15T14:26:49.518Z",
   "storms": [
     {
       "name": "SINLAKU",
       "code": "04W",
-      "lat": 16,
-      "lon": 144.9,
+      "lat": 16.2,
+      "lon": 144.6,
       "wind": 0
     }
   ]
