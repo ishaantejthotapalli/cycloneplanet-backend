@@ -1,4 +1,12 @@
 {
-  "lastUpdated": "2026-05-05T23:38:14.126Z",
-  "storms": []
+  "lastUpdated": "2026-05-06T01:29:46.250Z",
+  "storms": [
+    {
+      "name": "FIVE",
+      "code": "05W",
+      "lat": 8.4,
+      "lon": 148.3,
+      "wind": 0
+    }
+  ]
 }
