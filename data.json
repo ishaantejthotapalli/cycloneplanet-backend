@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-05-08T01:51:45.782Z",
+  "lastUpdated": "2026-05-08T04:46:38.106Z",
   "storms": [
     {
       "name": "HAGUPIT",
       "code": "05W",
-      "lat": 8.1,
-      "lon": 141.2,
+      "lat": 8.4,
+      "lon": 139.9,
       "wind": 0
     }
   ]
