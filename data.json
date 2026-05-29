@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-05-29T19:25:28.751Z",
+  "lastUpdated": "2026-05-29T21:19:12.381Z",
   "storms": [
     {
       "name": "JANGMI",
       "code": "06W",
-      "lat": 16.5,
-      "lon": 131.7,
+      "lat": 16.7,
+      "lon": 130.8,
       "wind": 0
     }
   ]
