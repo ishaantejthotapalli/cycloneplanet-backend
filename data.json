@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-06-19T20:10:14.994Z",
+  "lastUpdated": "2026-06-19T21:40:10.446Z",
   "storms": [
     {
-      "name": "SEVEN",
+      "name": "MEKKHALA",
       "code": "07W",
-      "lat": 13.7,
-      "lon": 140.2,
+      "lat": 14,
+      "lon": 138.6,
       "wind": 0
     }
   ]
