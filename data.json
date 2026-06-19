@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-06-19T13:52:08.176Z",
+  "lastUpdated": "2026-06-19T16:26:39.334Z",
   "storms": [
     {
       "name": "SEVEN",
       "code": "07W",
-      "lat": 13.3,
-      "lon": 141.8,
+      "lat": 13.7,
+      "lon": 140.2,
       "wind": 0
     }
   ]
